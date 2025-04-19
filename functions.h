@@ -19,7 +19,7 @@ void move_snake();
 void game_over();
 void show_controls();
 void choose_difficulty();
-
+void log_game_result(int score);
 
 Position snake[WIDTH * HEIGHT];
 int snake_length = INITIAL_LENGTH;
@@ -78,6 +78,7 @@ void draw_game() {
 }
 
 void game_over() {
+    log_game_result(score);
     system("cls");
     printf("\nGAME OVER!\n");
     printf("Final Score: %d\n", score);
@@ -167,6 +168,19 @@ void choose_difficulty() {
     }
     game_loop();
 }
+
+void log_game_result(int score) {
+    FILE *logFile = fopen("game_log.txt", "a");
+    if (logFile != NULL) {
+        time_t now = time(NULL);
+        struct tm *t = localtime(&now);
+        fprintf(logFile, "[%04d-%02d-%02d %02d:%02d:%02d] Game ended with score: %d\n",
+                t->tm_year + 1900, t->tm_mon + 1, t->tm_mday,
+                t->tm_hour, t->tm_min, t->tm_sec, score);
+        fclose(logFile);
+    }
+}
+
 
 
 void main_menu() {

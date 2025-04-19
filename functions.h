@@ -9,6 +9,8 @@
 #define HEIGHT 10
 #define INITIAL_LENGTH 3
 
+int game_speed = 150;
+
 void main_menu();  
 void game_loop();
 void init_game();
@@ -16,6 +18,8 @@ void draw_game();
 void move_snake();
 void game_over();
 void show_controls();
+void choose_difficulty();
+
 
 Position snake[WIDTH * HEIGHT];
 int snake_length = INITIAL_LENGTH;
@@ -32,14 +36,21 @@ void gotoxy(int x, int y) {
 
 void init_game() {
     system("cls");
+
+    snake_length = INITIAL_LENGTH;
+    score = 0;
+    direction = 'd';
+
     snake[0] = (Position){WIDTH / 2, HEIGHT / 2};
     for (int i = 1; i < snake_length; i++) {
-        snake[i] = (Position){snake[i-1].x - 1, snake[i-1].y};
+        snake[i] = (Position){snake[i - 1].x - 1, snake[i - 1].y};
     }
+
     srand(time(0));
     food.x = rand() % (WIDTH - 2) + 1;
     food.y = rand() % (HEIGHT - 2) + 1;
 }
+
 
 void draw_game() {
     system("cls");
@@ -115,7 +126,7 @@ void game_loop() {
         }
         move_snake();
         draw_game();
-        Sleep(150);
+        Sleep(game_speed);
     }
 }
 
@@ -132,6 +143,32 @@ void show_controls() {
     main_menu();
 }
 
+void choose_difficulty() {
+    system("cls");
+    printf("SELECT DIFFICULTY\n");
+    printf("1. Easy\n");
+    printf("2. Medium\n");
+    printf("3. Hard\n");
+    printf("Enter your choice: ");
+    char choice = _getch();
+    switch (choice) {
+        case '1':
+            game_speed = 200;
+            break;
+        case '2':
+            game_speed = 150;
+            break;
+        case '3':
+            game_speed = 75;
+            break;
+        default:
+            choose_difficulty();
+            return;
+    }
+    game_loop();
+}
+
+
 void main_menu() {
     system("cls");
     printf("SNAKE GAME\n");
@@ -141,12 +178,22 @@ void main_menu() {
     printf("Enter your choice: ");
     char choice = _getch();
     if (choice == '1') {
+        choose_difficulty();
         game_loop();
     } else if (choice == '2') {
-        show_controls();
+        system("cls");
+        printf("CONTROLS:\n");
+        printf("W - Move Up\n");
+        printf("S - Move Down\n");
+        printf("A - Move Left\n");
+        printf("D - Move Right\n");
+        printf("Press any key to return...\n");
+        _getch();
+        main_menu();
     } else if (choice == '3') {
         exit(0);
     } else {
         main_menu();
     }
 }
+

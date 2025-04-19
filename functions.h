@@ -15,6 +15,7 @@ void init_game();
 void draw_game();
 void move_snake();
 void game_over();
+void show_controls();
 
 Position snake[WIDTH * HEIGHT];
 int snake_length = INITIAL_LENGTH;
@@ -118,16 +119,32 @@ void game_loop() {
     }
 }
 
+void show_controls() {
+    system("cls");
+    printf("CONTROLS\n");
+    printf("---------\n");
+    printf("W - Move Up\n");
+    printf("S - Move Down\n");
+    printf("A - Move Left\n");
+    printf("D - Move Right\n");
+    printf("\nPress any key to return to Main Menu...\n");
+    _getch();
+    main_menu();
+}
+
 void main_menu() {
     system("cls");
     printf("SNAKE GAME\n");
     printf("1. Start Game\n");
-    printf("2. Exit\n");
+    printf("2. Controls\n");
+    printf("3. Exit\n");
     printf("Enter your choice: ");
     char choice = _getch();
     if (choice == '1') {
         game_loop();
     } else if (choice == '2') {
+        show_controls();
+    } else if (choice == '3') {
         exit(0);
     } else {
         main_menu();
